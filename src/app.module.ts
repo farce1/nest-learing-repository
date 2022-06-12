@@ -13,7 +13,7 @@ import { PrismaModule } from './prisma/prisma.module'
     PrismaModule,
     ConfigModule.forRoot({
       isGlobal: true
-    }),
-  ],
+    })
+  ]
 })
 export class AppModule {}
