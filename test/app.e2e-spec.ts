@@ -1,11 +1,10 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common'
-import { Test } from '@nestjs/testing'
+import { INestApplication } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import * as pactum from 'pactum'
 import { AuthDto } from 'src/auth/dto'
-import { AppModule } from 'src/app.module'
 import { EditUserDto } from 'src/user/dto'
 import { CreateBookmarkDto, EditBookmarkDto } from 'src/bookmark/dto'
+import { createNewTestApp } from 'src/utils'
 
 const TEST_URL = 'http://localhost:3333'
 
@@ -14,19 +13,9 @@ describe('App', () => {
   let prisma: PrismaService
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [AppModule]
-    }).compile()
+    app = await createNewTestApp()
 
-    app = moduleRef.createNestApplication()
-
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true
-      })
-    )
     await app.init()
-
     await app.listen(3333)
 
     prisma = app.get(PrismaService)
@@ -36,8 +25,8 @@ describe('App', () => {
     pactum.request.setBaseUrl(TEST_URL)
   })
 
-  afterAll(() => {
-    app.close()
+  afterAll(async () => {
+    await app.close()
   })
 
   describe('Auth', () => {
