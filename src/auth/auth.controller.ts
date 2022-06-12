@@ -16,9 +16,9 @@ export class AuthController {
 
   // auth/signin
   @Post('signin')
-  signin() {
+  signin(@Body() dto: AuthDto) {
     Logger.log('called signin')
 
-    return this.authService.signin()
+    return this.authService.signin(dto)
   }
 }
